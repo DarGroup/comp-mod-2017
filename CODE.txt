@@ -1,0 +1,78 @@
+TYPE CANDIES
+NAME AS STR
+WEIGH AS DBL
+COST AS LNG
+ID AS INT
+TEMP
+answ AS STR
+TempInpVar AS STR
+END TYPE
+
+DIM ZAPIS AS CANDIES
+DIM MAXN AS LONG
+DIM N AS LONG
+DIM TEMP STRING
+
+OPEN "DATA.dat" AS #1 LEN=64
+GET #1
+CLS
+MAXN=LOF(1)/64
+PRINT "Количество записей"; MAXN
+
+DO
+	INPUT "Номер записи = ";N
+  LOOP UNTIL N>=0 AND N<=MAXN+1
+
+	IF N=0 THEN END
+	ELSEIF N = MAXN+1 THEN PRINT "Записи еще нет"
+		ZAPIS.NAME=""
+		ZAPIS.WEIGH=0
+		ZAPIS.COST=0
+		ZAPIS.ID=0
+
+	ELSE GET #1, N, ZAPIS
+	PRINT "Наименование вкусняшки: ";ZAPIS.NAME
+	PRINT "Масса: ";ZAPIS.WEIGH
+	PRINT "Стоимость(денюшки, с которыми придется расстаться): ";ZAPIS.COST
+	PRINT "Номер товара на складе: ";ZAPIS.ID
+
+	END IF
+
+	PRINT "Добавить товар в список на склад"
+	INPUT "Введите наименование";TEMP IF TEMP <> "" THEN ZAPIS.NAME=VAL(TEMP)
+	INPUT "Ее массу";TEMP IF TEMP <> "" THEN ZAPIS.WEIGH=VAL(TEMP)
+	INPUT "Стоимость";TEMP IF TEMP <> "" THEN ZAPIS.COST=VAL(TEMP)
+	INPUT "И не забудьте про номер на складе";TEMP IF TEMP <> "" THEN ZAPIS.ID=VAL(TEMP)
+	PUT #1, N, ZAPIS
+	PRINT "Запись внесена!"
+
+LOOP
+
+INPUT "Введите содержание изменяемого параметра(На что хотите заменить?)";TempInpVar
+INPUT "Номер вкусняшки на складе: ";S IF S<>"" THEN ID=VAL(S)
+INPUT "Что хотите заменить? \n 1:Имя \n 2: Массу 3:Стоимость 4:Номер на складе(НЕ РЕКОМЕНДУЕТСЯ)";S 
+SELECT S 
+ CASE 1 PRINT "Наименование вкусняшки: ";ZAPIS.NAME  Temp = NAME
+ CASE 2	PRINT "Масса: ";ZAPIS.WEIGH  Temp = WEIGH
+ CASE 3	PRINT "Стоимость(денюшки, с которыми придется расстаться): ";ZAPIS.COST  Temp =COST
+ CASE 4	PRINT "Номер товара на складе: ";ZAPIS.ID  Temp = ID
+END SELECT 
+IF TempInpVar <> "" THEN 
+	PRINT "Производится замен данных в вибранном объекте"
+	SWAP ZAPIS.Temp, TempInpVar
+
+DO
+ INPUT "Bведите номер вкусняшки на складе: "; S IF S <> "" THEN ID=VAL(S)
+ GET #1, N=ID, ZAPIS
+ PRINT "Найдено по номеру:"; ZAPIS.NAME
+ iNPUT "Хотите больше информации по текущему объекту? (д/н)"; answ
+ IF answ = "д" THEN 
+	PRINT "Наименование вкусняшки: ";ZAPIS.NAME
+	PRINT "Масса: ";ZAPIS.WEIGH
+	PRINT "Стоимость(денюшки, с которыми придется расстаться): ";ZAPIS.COST
+	PRINT "Номер товара на складе: ";ZAPIS.ID
+ ELSEIF GOTO 74
+ iNPUT "Хотите найти еще что-нибудь? (д/н)"; answ
+LOOP WHILE answ != "н"
+
+
